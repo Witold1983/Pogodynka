@@ -1,3 +1,6 @@
 8277c8,127.0.0.1,GET,http://localhost:8000/pogodynka,1482342861,,200
 fc91b1,127.0.0.1,GET,http://localhost:8000/pogodynka?action=authorization_checker,1482342864,,200
 6a3467,127.0.0.1,GET,http://localhost:8000/pogodynka?action=get&city=Krakow,1482342865,,200
+fdee21,127.0.0.1,GET,http://localhost:8000/pogodynka,1482343491,,200
+7af30e,127.0.0.1,GET,http://localhost:8000/pogodynka?action=authorization_checker,1482343494,,200
+8f25ac,127.0.0.1,GET,http://localhost:8000/pogodynka?action=get&city=Krakow,1482343496,,200
