@@ -1,0 +1,38 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
+index:
+    path: /pogodynka
+    
+register:
+    path: /pogodynka/register
+    defaults: { _controller: AppBundle:Registration:register }
+    
+manager:
+    path:   /pogodynka/manager
+    defaults: { _controller: AppBundle:Manager:show }
+    
+manager_users:
+    path:   /pogodynka/manager/users
+    defaults: { _controller: AppBundle:Manager:showUser }
+    
+manager_cities:
+    path:   /pogodynka/manager/cities
+    defaults: { _controller: AppBundle:Manager:showCity }
+
+manager_services:
+    path:   /pogodynka/manager/services
+    defaults: { _controller: AppBundle:Manager:showService }
+    
+login:
+    path:   /pogodynka/login
+    defaults: { _controller: AppBundle:Security:login }
+    
+logout:
+    path:   /pogodynka/logout
+    
+services:
+    path:   /pogodynka/services
+    defaults: { _controller: AppBundle:Services:show }

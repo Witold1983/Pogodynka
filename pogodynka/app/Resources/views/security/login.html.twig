@@ -1,0 +1,39 @@
+{# app/Resources/views/security/login.html.twig #}
+
+{% block body %}
+{% if error %}
+    <div id="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+  checklogin();
+});
+</script>
+{% endblock %}
+
+Zaloguj się aby móc dodawać miasta, usługi i innych użytkowników<br/><br/>
+<form action="{{ path('login') }}" method="post">
+    <table cellpadding="0" cellspacing="0" align="center">
+      <tr>
+	<td>
+	  <label for="username" align="right">Użytkownik: </label>
+	</td>
+	<td>
+	  <input type="text" id="username" name="_username" value="{{ last_username }}" /><br/>
+	</td>
+      </tr>
+      <tr>
+	<td align="right">
+	  <label for="password">Hasło: </label>
+	</td>
+	<td>
+	  <input type="password" id="password" name="_password" /><br/>
+	</td>
+      </tr>
+    </table>
+
+    <button type="submit">Zaloguj</button>
+</form>
+{% endblock %}

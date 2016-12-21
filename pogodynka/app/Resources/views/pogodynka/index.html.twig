@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+<link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block javascripts %}
+<script src="js/jquery.min.js"></script>
+
+{% if city is empty %}
+  {% if error is empty %}
+<script type="text/javascript">
+var working=false;
+var target='output';
+
+var checklogin=function(param){
+  $.ajax({
+	url: '{{ path('index') }}',
+	type: "GET",
+	data: {action: 'authorization_checker'},
+	dataType: "html",
+      success: function(output) {
+	jQuery.globalEval(output);
+	if(typeof(param)!='undefined')
+	  query(param);
+	linka();  
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+						alert('Manufacturer ajax error: '+textStatus);
+					      }
+  });
+}
+var onsbmt=function(e){
+  e.preventDefault();
+  $("body").css("cursor", "progress");
+  
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: "html",
+    success: function(output) {
+      if(output.indexOf('id="'+target+'"')>-1)
+	output=$(output).filter('div#'+target).last().html();
+      
+      $('div#'+target).html(output);
+      $("body").css("cursor", "auto");
+      $('div#'+target+' form').submit(onsbmt);
+      linka();
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      working=false;
+      $("body").css("cursor", "auto");
+      alert('Manufacturer ajax error: '+textStatus);
+    }
+  });
+};
+						
+var query=function(param,url){
+    if(working==false){
+      
+      target=(typeof(param.target)=='undefined')?'output':param.target;
+	
+      $('div#'+target).html('<img src="images/loading.gif" alt="" width="20" /> {{ constant('AppBundle\\Constants\\ErrorsConsts::LACZENIE') }}');
+
+      working=true;
+      $("body").css("cursor", "progress");
+      
+      $.ajax({
+	url: (typeof(url)=='undefined'?'{{ path('index') }}':url),
+	type: "GET",
+	data: param,
+	dataType: "html",
+      success: function(output) {
+	working=false;
+	$("body").css("cursor", "auto");
+	
+	if(typeof(param.city)!='undefined')
+	  $('input#city').val(param.city);
+	document.title = 'Pogoda dla miasta '+param.city;
+	
+	if(output.indexOf('id="'+target+'"')>-1)
+	  output=$(output).filter('div#'+target).last().html();
+	
+	$('div#'+target).html(output);
+	$('div#output form').submit(onsbmt);
+	$('div#window').hide();
+	linka();
+
+	if(typeof(param.oncomplete)=='function')
+	  param.oncomplete();
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+	working=false;
+	$("body").css("cursor", "auto");
+	alert('Manufacturer ajax error: '+textStatus);
+      }
+    });
+    }
+}
+
+var fail=function(){	
+    checklogin({action:'get',city:$('form[name="choose_city"]').find('input[name="_city"]').val(),oncomplete:function(){ $('div#output').html('{{ constant('AppBundle\\Constants\\ErrorsConsts::BRAK_POLACZENIA') }}'); } });
+}
+
+var glowna=function(){
+$('div#output').html('<img src="images/loading.gif" alt="" width="20" /> {{ constant('AppBundle\\Constants\\ErrorsConsts::LACZENIE') }}');
+
+$.getJSON("http://ipinfo.io", function(response, status) {
+  if((response.city=='')||(status!='success'))
+      return fail();
+    checklogin({action:'get',city:response.city});
+}).error(fail);
+}
+
+var linka=function(){
+$('div#header a').click(function(e){
+  query({},$(this).attr('href'));
+  e.preventDefault();
+});
+
+$('div#output a').click(function(e){
+  query({target:'content'},$(this).attr('href'));
+  e.preventDefault();
+});
+  
+$('div#content a').click(function(e){
+  query({target:'content'},$(this).attr('href'));
+  e.preventDefault();
+});
+};
+
+var show_dialog=function(content){
+  $('div#window').html(
+  '<center><img src="{{ asset('images/close.png') }}" alt="Zamknij" onclick="$(\'div#window\').hide()" /><fieldset>'+content+'</fieldset></center>').show();
+}
+
+$(document).ready(function(){
+glowna();
+$('form[name="choose_city"]').submit(function(e){
+  query({action:'get',city:$(this).find('input[name="_city"]').val()});
+  e.preventDefault();
+});
+});
+</script>
+  {% else %}
+<div id="error">{{ error }}</div>
+  {% endif %}
+{% endif %}
+{% endblock %}
+{% block title %}Pogoda dla miasta {{ city }} {% endblock %}
+{% block body %}
+<div id="window"></div>
+<div id="header">
+<form name="choose_city" action="{{ path('index') }}" method="get">
+<input type="text" name="_city" id="city" value="{{ city }}" />
+<input type="image" src="{{ asset('images/loop.png') }}" value=">>" />
+</form>
+<div id="more"><span></span>
+<ul>
+<li><a href="{{ path('index') }}" title="Pogoda" onclick="glowna();return false"><img src="{{ asset('images/home.png') }}" alt="" /> <span>Pogoda</span></a></li>
+<li id="login"></li>
+</ul>
+</div><span></span>
+</div>
+<div id="output"></div>
+<!-- <img src="{{ asset('images/clouds.jpg') }}" alt="something" /> -->
+{% endblock %}

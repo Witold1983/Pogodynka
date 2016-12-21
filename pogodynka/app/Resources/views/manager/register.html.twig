@@ -1,0 +1,47 @@
+{# app/Resources/views/registration/register.html.twig #}
+
+{# form.username.vars.value #}
+
+{% if error %}
+    <div id="error">{{ error }}</div>
+{% endif %}
+<fieldset><legend><img src="{{ asset('images/users.png') }}" alt="" /> <span>{{ title|default(id|default('')?'Edytuj użytkownika ' ~ form.username.vars.value:'Dodaj użytkownika') }}</span> &nbsp; 
+
+{% if id|default('') %}
+  {% if app.user.username==form.username.vars.value %}   
+    <img src="{{ asset('images/delete.png') }}" alt="" title="Nie możesz skasować własnego konta" />
+  {% else %}
+    <a title="Usuń użytkownika {{ form.username.vars.value }}" href="{{ path('manager_users',{'action':'drop', 'id': id }) }}"><img src="{{ asset('images/delete.png') }}" alt="" /></a>
+  {% endif %}
+{% endif %}
+</legend>
+{{ form_start(form, {'action': path('manager_users'), 'method': 'POST'}) }}
+
+<table cellpadding="0" cellspacing="0" border="0">
+  <tr><td colspan="2">{{ form_errors(form.username) }}</td></tr>
+  <tr><td>Nazwa:</td><td>{{ form_widget(form.username) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.email) }}</td></tr>
+  <tr><td>Email:</td><td>{{ form_widget(form.email) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.plainPassword.first) }}</td></tr>
+  <tr><td>Hasło:</td><td>{{ form_widget(form.plainPassword.first) }}</td></tr>
+  
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.plainPassword.second) }}</td></tr>
+  <tr><td>Powtórz hasło:</td><td>{{ form_widget(form.plainPassword.second) }}</td></tr>
+  
+  <tr>
+    <td colspan="2">
+{% if id|default('') %}
+  <input type="hidden" name="id" value="{{ id }}" />
+{% endif %}
+      <button type="submit">Zapisz</button>
+      <input type="button" value="Powrót" onclick="query({target:'content'},'{{ path('manager') }}')" />
+</td>
+  </tr>
+</table>  
+{{ form_end(form) }}
+</fieldset>

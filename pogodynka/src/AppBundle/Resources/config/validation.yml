@@ -1,0 +1,15 @@
+AppBundle\Entity\User:
+    properties:
+        
+        username:
+            - NotBlank:  {message: "Musisz podać imię użytkownika"}
+            - Length: {max: 25, maxMessage: "Nazwa użytkownika może liczyć max. {{ limit }} znaków", min: 3, minMessage: "Nazwa użytkownika może liczyć min. {{ limit }} znaków"}
+            
+        plainPassword:
+            - NotBlank:  {message: "Podaj hasło"}
+            - Length: {max: 60, maxMessage: "Hasło może liczyć max. {{ limit }} znaków", min: 8, minMessage: "Hasło może liczyć min. {{ limit }} znaków"}
+            - Regex:
+                pattern: '/(?=.*\d.*)(?=.*[a-zA-Z].*)(?=.*[\@!#\$%&\?].*).{8,60}/'
+                match:   true
+                message: 'Hasło musi liczyć min. 8 znaków i jeden znak specjalny np.: Wit@lD876'
+            

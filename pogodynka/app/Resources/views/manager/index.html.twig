@@ -1,0 +1,50 @@
+{# app/Resources/views/manager/index.html.twig #}
+
+{% block body %}
+{% if error|default('') %}
+    <div id="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+  checklogin();
+});
+</script>
+{% endblock %}
+
+<div id="content">
+{% if message|default('') %}
+    <div id="message">{{ message }}</div>
+    <a href="#" title="Powrót" onclick="query({target:'output'},'{{ path('manager') }}'); return false"><span>&laquo; Powrót</span></a>
+{% else %}
+   <a href="{{ path('manager_services') }}" title="Dodaj usługę"><img src="{{ asset('images/puzzle.png') }}" alt="" /> <span>Dodaj usługę</span></a>
+   <a href="{{ path('manager_users') }}" title="Dodaj użytkownika"><img src="{{ asset('images/usersbig.png') }}" alt="" /> <span>Dodaj użytkownika</span></a>
+   <a href="{{ path('manager_cities') }}" title="Dodaj miasto"><img src="{{ asset('images/citiesbig.png') }}" alt="" /> <span>Dodaj miasto</span></a>
+{% endif %}
+</div>
+
+<fieldset><legend><img src="{{ asset('images/uslugi.png') }}" alt="" /> <span>Usługi</span></legend>
+<table cellpading="0" cellspacing="0" border="0" width="190">
+{% for s in services %}
+  <tr><td><div><a href="{{ path('manager_services', {'id':s.getId()}) }}" title="{{ s.getServiceName() }}">{{ s.getServiceName() }}</a></div></td></tr>
+{% endfor %}
+</table>
+</fieldset>
+<br />
+<fieldset><legend><img src="{{ asset('images/users.png') }}" alt="" /> <span>Użytkownicy</span></legend>
+<table cellpading="0" cellspacing="0" border="0" width="190">
+{% for u in users %}
+  <tr><td><a href="{{ path('manager_users', {'id':u.getId()}) }}" title="{{ u.getUsername() }}">{{ u.getUsername() }}</a></td></tr>
+{% endfor %}
+</table>
+</fieldset>
+<br />
+<fieldset><legend><img src="{{ asset('images/cities.png') }}" alt="" /> <span>Miasta</span></legend>
+<table cellpading="0" cellspacing="0" border="0" width="190">
+{% for c in cities %}
+  <tr><td><a href="{{ path('manager_cities', {'id':c.getId()}) }}" title="{{ c.getName() }}">{{ c.getName() }}</a></td></tr>
+{% endfor %}
+</table>
+</fieldset>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% block body %}
+{% if error is not empty %}
+<div id="error">{{ error }}</div>
+{% else %}
+<h1>{{ city.getName() }}</h1>
+<small>{{ city.getCoordLon() }} &nbsp; {{ city.getCoordLat() }}</small>
+<h1>{{ data|last.getTemp() }}&deg;C</h1>
+<img src="{{ data|last.getIcon() }}" alt="" />
+<table cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+{% for d in data %}
+  <td><img src="{{ d.getIcon() }}" alt="" />
+  <h1>{{ d.getTemp() }}</h1>
+  
+  {{ d.getPostedAt() }}
+  </td>
+  <td> &nbsp; </td>
+{% endfor %}
+</tr>
+</table>
+{% endif %}
+{% endblock %}

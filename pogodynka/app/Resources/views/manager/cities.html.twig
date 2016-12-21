@@ -1,0 +1,56 @@
+{# app/Resources/views/registration/cities.html.twig #}
+
+{% if error %}
+    <div id="error">{{ error }}</div>
+{% endif %}
+<fieldset><legend><img src="{{ asset('images/cities.png') }}" alt="" /> <span>{{ title|default(id|default('')?'Edytuj miasto ' ~ form.city_name.vars.value:'Dodaj miasto') }}</span> &nbsp; 
+
+{% if id|default('') %}
+    <a title="Usuń miast {{ form.city_name.vars.value }}" href="{{ path('manager_cities',{'action':'drop', 'id': id }) }}"><img src="{{ asset('images/delete.png') }}" alt="" /></a>
+{% endif %}
+</legend>
+{{ form_start(form, {'action': path('manager_cities'), 'method': 'POST'}) }}
+
+<table cellpadding="0" cellspacing="0" border="0" width="390">
+  
+  <tr><td colspan="2">{{ form_errors(form.city_name) }}</td></tr>
+  <tr id="city_name"><td>Nazwa:</td><td><span id="odpytaj" title="Odpytaj serwer"></span>{{ form_widget(form.city_name) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.cityCode) }}</td></tr>
+  <tr><td>Kod miasta:</td><td>{{ form_widget(form.cityCode, { 'attr': { 'readonly': 'true' } }) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.coord_lon) }}</td></tr>
+  <tr><td>Longitude:</td><td>{{ form_widget(form.coord_lon, { 'attr': { 'readonly': 'true' } }) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.coord_lat) }}</td></tr>
+  <tr><td>Latitude:</td><td>{{ form_widget(form.coord_lat, { 'attr': { 'readonly': 'true' } }) }}</td></tr>
+  
+  <tr>
+    <td colspan="2"><center>
+{% if id|default('') %}
+  <input type="hidden" name="id" value="{{ id }}" />
+{% endif %}
+      <button type="submit">Zapisz</button>
+      <input type="button" value="Powrót" onclick="query({target:'content'},'{{ path('manager') }}')" />
+    </center></td>
+  </tr>
+</table>  
+{{ form_end(form) }}
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    
+    var odpytaj=function(){
+      query({target: 'content',action: 'query',cityname:$(this).parent().parent().find('input').val()},'{{ path('manager_cities') }}');
+    }
+    
+    $('span#odpytaj').click(odpytaj);
+  });
+</script>
+
+
+

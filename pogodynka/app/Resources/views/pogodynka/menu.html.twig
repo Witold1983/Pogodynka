@@ -1,0 +1,17 @@
+{% block javascripts %}
+
+{% if user_name is empty %}
+  $('div#header > span').html('Witaj nieznajomy, sprawdź prognozę pogody');
+  $('li#login').html('<a href="{{ path('login') }}" title="Logowanie"><img src="{{ asset('images/lock.png') }}" alt="" /> <span>Zaloguj się</span></a></li>');
+
+{% else %}
+  
+  $('div#header > span').html('Witaj {{ user_name }}, sprawdź prognozę pogody');
+  $('li#login').html('<a href="{{ path('logout') }}" title="Wyloguj"><img src="{{ asset('images/lock.png') }}" alt=\"\" /> <span>Wyloguj się</span></a><br/><a href="{{ path('manager') }}" title="Zarządzanie Witryną"><img src="{{ asset('images/gear.png') }}" alt="" /> <span>Zarządzanie Witryną &raquo;</span></a>'+
+  '<ul>'+
+    '<li><a href="{{ path('services') }}" title="Zarządzanie Usługami"><img src="{{ asset('images/uslugi.png') }}" alt="" />  <span>Zarządzanie Usługami</span></a></li>'+
+    '<li><a href="{{ path('manager') }}" title="Zarządzanie Użytkownikami"><img src="{{ asset('images/users.png') }}" alt="" />  <span>Zarządzanie Użytkownikami</span></a></li>'+
+  '</ul>');
+
+{% endif %}
+{% endblock %}

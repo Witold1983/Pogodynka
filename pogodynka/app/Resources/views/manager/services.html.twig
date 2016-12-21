@@ -1,0 +1,278 @@
+{# app/Resources/views/registration/services.html.twig #}
+
+{% if error %}
+    <div id="error">{{ error }}</div>
+{% endif %}
+<fieldset><legend><img src="{{ asset('images/uslugi.png') }}" alt="" /> <span>{{ title|default(id|default('')?'Edytuj usługę ' ~ form.service_name.vars.value:'Dodaj usługę') }}</span> &nbsp; 
+
+{% if id|default('') %}
+  {% if services|length < 2 %}   
+    <img src="{{ asset('images/delete.png') }}" alt="" title="Nie możesz skasować jedynego konta" />
+  {% else %}
+    <a title="Usuń konto {{ form.service_name.vars.value }}" href="{{ path('manager_services',{'action':'drop', 'id': id }) }}"><img src="{{ asset('images/delete.png') }}" alt="" /></a>
+  {% endif %}
+{% endif %}
+</legend>
+{{ form_start(form, {'action': path('manager_services'), 'method': 'POST'}) }}
+
+<table cellpadding="0" cellspacing="0" border="0" width="390">
+  
+  <tr><td colspan="2">*Aby podpiąć nazwę miasta w polu url wpisz %s</td></tr>
+  <tr><td></td><td>{{ form_widget(form.isActive) }}</td></tr>
+
+  <tr><td colspan="2">{{ form_errors(form.service_name) }}</td></tr>
+  <tr><td>Nazwa:</td><td>{{ form_widget(form.service_name) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.url) }}</td></tr>
+  <tr class="url"><td>Url:</td><td><span class="status"></span><span title="Odpytaj serwer" id="odpytaj"></span>{{ form_widget(form.url) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.validate) }}</td></tr>
+  <tr class="url"><td>Validacja:</td><td>{{ form_widget(form.validate) }}</td></tr>
+
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(form.iconurl) }}</td></tr>
+  <tr><td>Adres miniatury:</td><td>{{ form_widget(form.iconurl, {'required': false}) }}</td></tr>
+  
+  {% for postField in form.post %}
+    
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(postField) }}</td></tr>
+  <tr class="post"><td width="130">Zmienne POST</td><td><span title="Usuń pole post" class="remove"></span><span title="Dodaj pole post" class="add"></span>{{ form_widget(postField, { 'attr':{'readonly':'readonly','class':'edit'} }) }}</td></tr>
+  
+  {% endfor %}
+  
+  {% for postField in form.mapping %}
+  
+  <tr></tr>
+  <tr><td colspan="2">{{ form_errors(postField) }}</td></tr>
+  <tr class="mapowanie"><td>Mapowanie pól:</td><td><span title="Usuń mapowanie" class="remove"></span><span title="Dodaj mapowanie" class="add"></span>{{ form_widget(postField, { 'attr':{'readonly':'readonly','class':'edit'} }) }}</td></tr>
+  
+  {% endfor %}
+  <tr>
+    <td colspan="2"><center>
+{% if id|default('') %}
+  <input type="hidden" name="id" value="{{ id }}" />
+{% endif %}
+      <button type="submit">Zapisz</button>
+      <input type="button" value="Powrót" onclick="query({target:'content'},'{{ path('manager') }}')" />
+    </center></td>
+  </tr>
+</table>  
+{{ form_end(form) }}
+</fieldset>
+
+<script type="text/javascript">
+
+    
+var print_r=function(o,godown)
+{
+    function f(o, p, s)
+    {
+        for(x in o)
+        {
+            if ('object' == typeof o[x])
+            {
+                s += p + x + ' obiekt: \n';
+                pre = p + '\t';
+		if(godown!==undefined)
+                s = f(o[x], pre, s);
+            }
+            else
+            {
+                s += p + x + ' : ' + o[x] + '\n';
+            }
+        }
+        return s;
+    }
+    return f(o, '', '');
+}
+
+    var mapping=['longitude','latitude','icon','temp','temp_min','temp_max','pressure','humidity'];
+    
+    var zwroc_selecta=function(ob,i){
+      
+      var dostepnepola=mapping.slice();
+      
+      $('div#content table tr').each(function(index){
+	if($(this).attr('class')=='mapowanie'){
+	  if(i!=$(this).index()){
+	    var pole=$(this).find('input').val();
+	    pole=pole.substring(0,pole.indexOf('='));
+	    if(dostepnepola.indexOf(pole)>-1)
+	      dostepnepola.splice(dostepnepola.indexOf(pole),1);
+	      
+	  }
+	}    
+      });
+      if($(dostepnepola).length<1)
+	return false;
+	
+      var select="<select>";
+      $(dostepnepola).each(function(index,value){
+	select+='<option value="'+value+'">'+value+'</option>'
+      });
+      return select;
+    }
+    
+    var mapuj=function(ob,i){
+      var wartosc=ob.parent().parent().find('input').val();
+      wartosc=wartosc.substring(wartosc.indexOf('=')+1);
+      
+      show_dialog('<legend><img src="{{ asset('images/uslugi.png') }}" alt="" /> Podaj wartość</legend><div id="message"></div>'+ select+'</select>:<input value="'+wartosc+'" /><br/><br/><input type="button" value="Dodaj" onclick="zapisz_mapowanie($(this).parent(),'+i+')" /> <input type="button" value="Zamknij" onclick="$(\'div#window\').hide()" />');
+    }
+    
+    var validuj=function(ob,wartosc){
+      return false;
+      if(wartosc.indexOf('=')>-1){
+	$(ob.find('div#message')).html('Podano niepoprawną wartość');
+	return '=';
+      }
+      $(ob.find('div#message')).html('');
+      return false;
+    }
+    
+    var zapisz_mapowanie=function(ob,index){
+      if(validuj(ob,ob.find('input').val()))
+	return false;
+	
+      $('div#content table tr:nth-of-type('+(index+1)+')').find('input').val(ob.find('select option:selected').val()+'='+ob.find('input').val());
+    
+    }
+    
+    var zapisz_post=function(ob,index){
+      if(validuj(ob,ob.find('input[name="zmienna"]').val())||validuj(ob,ob.find('input[name="wartosc"]').val()))
+      	return false;
+      
+      var wartosc=ob.find('input[name="zmienna"]').val()+'='+ob.find('input[name="wartosc"]').val();
+      if((ob.find('input[name="zmienna"]').val().length==0)||(ob.find('input[name="wartosc"]').val().length=0))
+	wartosc='';
+      
+      $('div#content table tr:nth-of-type('+(index+1)+')').find('input').val(wartosc);
+    }
+    
+    var wstaw_post=function(ob,i){
+    
+      var wartosc=ob.parent().parent().find('input').val();
+      var zmienna='';
+      
+      if(wartosc.indexOf('=')>0){
+	zmienna=wartosc.substring(0,wartosc.indexOf('='));
+	var wartosc=wartosc.substring(wartosc.indexOf('=')+1);
+      } 
+      
+      show_dialog('<legend><img src="{{ asset('images/uslugi.png') }}" alt="" /> Podaj wartość</legend><div id="message"></div><input name="zmienna" value="'+zmienna+'" size="10" />=<input name="wartosc" value="'+wartosc+'" size="10" /><br/><br/><input type="button" value="Dodaj" onclick="zapisz_post($(this).parent(),'+i+')" /> <input type="button" value="Zamknij" onclick="$(\'div#window\').hide()" />');
+    }
+    
+    
+    $(document).ready(function(){
+    
+      $('div#content table tr.url td span#odpytaj').click(function(){
+	if(working==true)
+	  return false;
+	    
+	$("body").css("cursor", "progress");
+	  
+	working=true;
+	 $.ajax({
+	    url: url=$(this).parent().parent().find('input').val().replace('%s',$('div#header form[name="choose_city"] > input#city').val()),
+	    type: "GET",
+	    data: {},
+	    dataType: "html",
+      
+	  success: function(output) {
+	    working=false;
+	    $("body").css("cursor", "auto");
+	    $('div#content table tr.url td span.status').removeClass('success').attr('title','Błąd połączenia');
+	    
+	    if(output.length){
+	      jQuery.globalEval('data='+output);
+	      $('div#content table tr.url td span.status').addClass('success').attr('title','Połączono');
+	      }
+	    else
+	      alert('Wystapił błąd, sprawdź podany adres');
+	    //alert(print_r(data,true));
+	    show_dialog('<pre style="text-align:left">'+output);
+	    
+	  },
+	  error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    working=false;
+	    $("body").css("cursor", "auto");
+	    alert('Wystapił błąd, sprawdź podany adres: '+textStatus);
+	  }
+	});
+      });
+    
+  {% if id|default('') %}
+    $('div#content table tr.url td span#odpytaj').click();
+  {% endif %}
+    
+      var uporzadkuj_pola=function(p){
+	var pole=(p=='mapowanie')?'mapping':'post';
+	
+	$('div#content table tr.'+p).each(function(index){
+	      $(this).find('input').attr({'name':'service['+pole+']['+index+']','id':'service_'+pole+'_'+index});
+	});  
+      }
+    
+      var edit_field=function(){
+      
+	var action=$(this).attr('class');
+	var pole=$(this).parent().parent().attr('class');
+	var index=$(this).parent().parent().index();
+	
+      switch(pole)
+      {
+	case 'mapowanie':
+	  switch(action){
+	    case 'edit':
+	      select=zwroc_selecta($(this),index);
+	      return mapuj($(this),index);
+	    break;
+	    case 'add':
+	      if((select=zwroc_selecta($(this),index+1))==false)
+		return false;
+		
+	      $(this).parent().parent().after('<tr class="mapowanie"><td>Mapowanie pól:</td><td><span title="Usuń mapowanie" class="remove"></span><span title="Dodaj mapowanie" class="add"></span><input value="" readonly="readonly" class="edit" /></td></tr>');
+	      
+	      $('tr.mapowanie td input, tr.post td input, tr.mapowanie td span, tr.post td span').off().click(edit_field);
+	      
+	      $('div#content table tr:nth-of-type('+(index+2)+')').find('input').click();
+	      break;
+	      
+	    case 'remove':
+	      if($('tr.mapowanie').length>1)
+		$(this).parent().parent().remove();
+	  }
+	break;
+	
+	case 'post':
+	  switch(action){
+	    case 'edit':
+	      wstaw_post($(this),index);
+	    break;
+	    case 'add':
+	    
+	      $(this).parent().parent().after('<tr class="post"><td>Zmienne POST:</td><td><span title="Usuń zmienną" class="remove"></span><span title="Dodaj pole post" class="add"></span><input value="" readonly="readonly" class="edit" /></td></tr>');
+	      
+	      $('tr.mapowanie td input, tr.post td input, tr.mapowanie td span, tr.post td span').off().click(edit_field);
+	      
+	      $('div#content table tr:nth-of-type('+(index+2)+')').find('input').click();
+	      break;
+	    
+	    case 'remove':
+	      if($('tr.post').length>1)
+		$(this).parent().parent().remove();
+	  }
+	break;
+      }
+      uporzadkuj_pola(pole);
+    }
+    
+    $('tr.mapowanie td input, tr.post td input, tr.mapowanie td span, tr.post td span').click(edit_field);
+    });
+</script>
+
+
+

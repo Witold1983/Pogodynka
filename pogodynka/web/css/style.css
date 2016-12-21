@@ -1,0 +1,92 @@
+body { padding: 0; margin: 0; font-family: Sans-serif; background: #1a1333 url(../images/bkg.jpg) fixed center top no-repeat; color: white }
+div#header { background-color: #1a1333; color: white; padding: 10px; position: relative; z-index: 2}
+div#header form { background-color: #221f3b; position: absolute; right: 10px; top: 3px; padding: 3px; }
+div#header form input { background: transparent; border: 0; color: white; padding: 4px; }
+div#header form input[type=image] { float: right; padding: 0; background: url(../images/loop.png) 0 0 no-repeat; width: 26px; height: 26px; }
+div#more > span{ display: block; width: 38px; height: 39px; background: url(../images/more.png) 9px 14px no-repeat; float: left; margin: -10px 10px 0 -10px; }
+div#more:hover > span { background-color: #304eb7 }
+div#more ul{ display: none; float: left; position: absolute; top: 39px; left: 0; list-style: none; }
+div#more:hover ul { width: 300px; background: gray; margin: 0; padding: 0; }
+div#more:hover > ul { display: block; }
+div#more ul li { position: relative; height: 39px; width: 280px; }
+div#more ul li a { padding: 10px; float: left; position: relative; width: 280px; color: white !important; }
+div#more ul > li > a > span { position: absolute; left: 45px; top: 15px; width: 100%; }
+div#more ul > li > a:hover { background-color: #1f3468 }
+
+div#more ul li > ul { display: none; position: absolute; top: 102px; }
+/*div#more ul > li:hover > ul { display: block !important; }
+div#more ul > li:hover > ul > li a img, div#more ul > li:hover > ul > li a span { margin-left: 20px }
+*/
+div#output, div#window center { width:650px; padding: 10px; border: 1px solid white; text-align:center; margin: 100px auto 0 auto;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+
+  
+  background: -moz-linear-gradient(top, rgba(30,87,153,1) 0%, rgba(125,185,232,0) 100%);
+background: -webkit-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%);
+background: linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#007db9e8',GradientType=0 );
+position: relative;
+}
+
+div#error { background: url(../images/error.gif) left 4px no-repeat; padding-left: 20px; text-align: left }
+
+a, a:hover, a:active { outline: none }
+
+h1 { font-weight: normal }
+
+fieldset { -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 1%;
+  padding: 0;
+  clear: both;
+}
+fieldset legend { padding-right: 10px }
+fieldset legend img, fieldset legend span { vertical-align: middle }
+
+a, a:hover, a:active { color: white; }
+a, a:active { text-decoration: none }
+
+fieldset table tr:nth-child(2n) { background: rgba(0,0,0,0.60); } 
+fieldset table tr:nth-child(2n+1) { background: rgba(0,0,0,0.70); } 
+fieldset table tr:hover { background: rgba(0,0,0,0.50); } 
+fieldset table tr td a { display: block; padding: 10px }
+fieldset table tr td { white-space: nowrap }
+fieldset table tr td div { width: 188px; overflow: hidden }
+
+div#content { background: rgba(0,0,0,0.50); width: 410px; position:absolute; left: 220px; top: 20px; border: 1px solid white; overflow: auto; height: 85%; text-align: center; padding: 10px 0 0 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+div#content > a { width:140px; display: block; text-align:center; position: relative; float: left; }
+div#content > a span { clear: both; white-space: nowrap }
+div#content > a img { width: 64px; text-align: center; margin: 0 auto }
+div#content table tr td { text-align: left; padding-left: 10px; position: relative; }
+div#output > table tr td:nth-child(2n+1) { background: rgba(0,0,0,0.30); } 
+
+
+tr.post > td > input, tr.mapowanie > td > input { width: 179px }
+tr.post > td > span, tr.mapowanie > td > span, tr.url > td > span, span#odpytaj { float: right; width: 20px; height: 20px; position: relative; right: 5px; background:url('../images/plus_minus.png') left -20px no-repeat !important; cursor: pointer; }
+
+tr#city_name td span#odpytaj { position:absolute; right: 30px }
+
+tr.url > td > span { background-position: -60px -20px !important }
+tr.url > td > span.success { background-position: -60px 0px !important }
+
+tr.url > td > span:nth-of-type(2), span#odpytaj { background-position: -40px -20px !important }
+tr.url > td > span:nth-of-type(2):hover, span#odpytaj:hover { background-position: -40px 0px !important }
+
+tr.post > td > span:first-of-type, tr.mapowanie > td > span:first-of-type {  background-position: -20px -20px !important}
+tr.post > td > span:hover, tr.mapowanie > td > span:hover {  background-position: left 0 !important}
+tr.post > td > span:first-of-type:hover, tr.mapowanie > td > span:first-of-type:hover {  background-position: -20px 0 !important}
+
+div#window { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 1; display: none; padding-top: 80px; text-align: center } 
+div#window center { width: 450px; background: #3166a2; 
+-webkit-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75); max-height: 300px; overflow: auto; }
+div#window center > img { position: absolute; right: 5px; top: 2px; cursor: pointer }
+div#window center > fieldset { width: 440px }
