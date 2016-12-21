@@ -4,6 +4,12 @@ pogodynka
 A Symfony project created on November 17, 2016, 11:47 am.
 
 Witajcie,
+Te pliki pochodzą prosto z mojego komputera z zainstalowanym linuxem Kubuntu, więc nie wiem czy na mac'ach będą chodzić
+Przy wgrywaniu, usunąłem plik .gitignore ponieważ nie wysyłał do github'a wszystkich plików.
+Na moim komputerze zgrane pliki z githuba działają.
+
+
+
 Przy pracy nad pogodynką natrafiłem na dwa problemy:
 
 Po pierwsze kiedy zapisywałem do bazy nowe dane pogodowe a następnie w tej samej sesji próbowałem je odczytać w twigu,
