@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 20, 2016 at 02:27 PM
+-- Generation Time: Dec 20, 2016 at 01:16 PM
 -- Server version: 5.5.44-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.14
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `app_users` (
 --
 
 INSERT INTO `app_users` (`id`, `username`, `password`, `email`, `is_active`, `added_at`) VALUES
-(1, 'Witold', '$2y$13$SFC.MuhO9o.ubp3yXmkKbOoAweCwcCcB/kwTfwKOjR0.ayUp3tFra', 'witold.byrtek@gmail.com', 1, '2016-12-01 18:31:05'),
+(1, 'Witold', '$2y$13$ez2zumYxC3/Ht8MAGRygQ.0B6kGsDSNDEOmC.Ovz6aVpucVYtY/AG', 'witold.byrtek@gmail.com', 1, '2016-12-01 18:31:05'),
 (2, 'Maniek', '$2y$13$zUhXIWBi8u0wRtMt768QiOSVcwWFPgWL1udZYuJBxOVEAOmYcKi1C', 'witek_byrtek@interia.pl', 1, '2016-12-16 19:55:39');
 
 -- --------------------------------------------------------
